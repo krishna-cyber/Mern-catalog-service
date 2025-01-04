@@ -23,7 +23,7 @@ export interface Category {
 const priceConfigurationSchema = new Schema<PriceConfiguration>({
     priceType: {
         type: String,
-        enum: ["base", "additional"],
+        enum: ["base", "aditional"],
         required: true,
     },
     avilableOptions: {

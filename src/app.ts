@@ -1,10 +1,9 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import { globalErrorHandler } from "./common/middlewares/globalErrorHandler";
+import categoryRouter from "./category/categoryRouter";
 const app = express();
 
-app.get("/", (req: Request, res: Response) => {
-    res.json({ msg: `Hello from catalog service` });
-});
+app.use("/category", categoryRouter);
 
 app.use(globalErrorHandler);
 

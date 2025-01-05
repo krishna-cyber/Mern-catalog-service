@@ -26,15 +26,8 @@ export const globalErrorHandler = (
     });
 
     res.status(statusCode).json({
-        errors: [
-            {
-                ref: errorId,
-                type: err.name,
-                msg: message,
-                path: req.path,
-                location: "server",
-                stack: isProduction ? null : err.stack,
-            },
-        ],
+        ref: errorId,
+        message,
+        errors: err,
     });
 };

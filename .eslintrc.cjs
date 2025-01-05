@@ -17,6 +17,5 @@ module.exports = {
         "dot-notation": "error",
         "@typescript-eslint/require-await": "off",
         "@typescript-eslint/no-misused-promises": "off",
-        "@typescript-eslint/unbound-method": "off",
     },
 };

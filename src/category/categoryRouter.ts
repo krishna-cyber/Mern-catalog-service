@@ -15,13 +15,31 @@ const categoryService = new CategoryService();
 
 const categoryController = new CategoryController(categoryService);
 
-categoryRouter.post(
-    "/",
-    authenticate,
-    canAccess(["admin"]) as RequestHandler,
-    categoryValidator,
-    (req: Request, res: Response, next: NextFunction) =>
-        categoryController.create(req, res, next),
-);
+//parameterized route first
+//todo
+categoryRouter
+    .route("/:id")
+    .get((req: Request, res: Response, next: NextFunction) =>
+        categoryController.getSingleCategory(req, res, next),
+    )
+    .patch((req: Request, res: Response, next: NextFunction) =>
+        categoryController.getSingleCategory(req, res, next),
+    )
+    .delete((req: Request, res: Response, next: NextFunction) =>
+        categoryController.getSingleCategory(req, res, next),
+    );
+
+categoryRouter
+    .route("/")
+    .get((req: Request, res: Response, next: NextFunction) =>
+        categoryController.getCategoryLists(req, res, next),
+    )
+    .post(
+        authenticate,
+        canAccess(["admin"]) as RequestHandler,
+        categoryValidator,
+        (req: Request, res: Response, next: NextFunction) =>
+            categoryController.create(req, res, next),
+    );
 
 export default categoryRouter;

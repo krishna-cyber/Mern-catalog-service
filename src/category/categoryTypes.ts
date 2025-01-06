@@ -17,3 +17,9 @@ export interface Category {
     priceConfiguration: PriceConfiguration;
     attributes: Attribute[];
 }
+
+export interface CreateCategoryRequest {
+    name: string;
+    priceConfiguration: PriceConfiguration;
+    attributes: Attribute;
+}

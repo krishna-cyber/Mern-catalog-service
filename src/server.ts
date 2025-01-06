@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import app from "./app";
 import logger from "./config/logger";
 import config from "config";
@@ -16,4 +17,14 @@ const startServer = () => {
     }
 };
 
-startServer();
+//connect to datbase and start server
+
+mongoose
+    .connect(config.get("database.uri"))
+    .then(() => {
+        logger.info(`Connected to database and server starts`);
+        startServer();
+    })
+    .catch(() => {
+        process.exit(1);
+    });

@@ -4,7 +4,7 @@ import { Attribute, Category, PriceConfiguration } from "./categoryTypes";
 const priceConfigurationSchema = new Schema<PriceConfiguration>({
     priceType: {
         type: String,
-        enum: ["base", "aditional"],
+        enum: ["base", "additional"],
         required: true,
     },
     avilableOptions: {
@@ -33,20 +33,23 @@ const attributeSchema = new Schema<Attribute>({
     },
 });
 
-const categorySchema = new Schema<Category>({
-    name: {
-        type: String,
-        required: true,
+const categorySchema = new Schema<Category>(
+    {
+        name: {
+            type: String,
+            required: true,
+        },
+        priceConfiguration: {
+            type: Map,
+            of: priceConfigurationSchema,
+            required: true,
+        },
+        attributes: {
+            type: [attributeSchema],
+            required: true,
+        },
     },
-    priceConfiguration: {
-        type: Map,
-        of: priceConfigurationSchema,
-        required: true,
-    },
-    attributes: {
-        type: [attributeSchema],
-        required: true,
-    },
-});
+    { timestamps: true },
+);
 
 export default mongoose.model("Category", categorySchema);

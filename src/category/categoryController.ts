@@ -10,9 +10,9 @@ export class CategoryController {
         interface CreateCategoryRequest {
             name: string;
             priceConfiguration: PriceConfiguration;
-            attribute: Attribute;
+            attributes: Attribute;
         }
-        const { name, priceConfiguration, attribute } =
+        const { name, priceConfiguration, attributes } =
             req.body as CreateCategoryRequest;
         try {
             const result = validationResult(req);
@@ -23,7 +23,7 @@ export class CategoryController {
             const category = await this.categoryService.create(
                 name,
                 priceConfiguration,
-                attribute,
+                attributes,
             );
 
             res.json({

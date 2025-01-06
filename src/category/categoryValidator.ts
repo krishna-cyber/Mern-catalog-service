@@ -20,7 +20,7 @@ export default checkSchema(
                 errorMessage: "Pricetype must be string",
             },
             isIn: {
-                options: [["base", "aditional"]],
+                options: [["base", "additional"]],
                 errorMessage: "Invalid priceType options",
             },
         },

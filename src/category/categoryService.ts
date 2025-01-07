@@ -22,8 +22,8 @@ export default class CategoryService {
         return categoryModel.find({});
     }
 
-    async getById(id: string) {
-        return categoryModel.findById(id);
+    async getById(_id: string) {
+        return categoryModel.findById(_id);
     }
 
     async updateById(id: string, data: Category) {

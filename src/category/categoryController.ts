@@ -52,7 +52,7 @@ export class CategoryController {
             const categoryDetails = await this.categoryService.getById(id);
             res.json({
                 result: categoryDetails,
-                message: "Category Details",
+                message: "Category Detail",
                 meta: null,
             });
         } catch (error) {

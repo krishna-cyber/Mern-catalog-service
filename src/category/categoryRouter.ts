@@ -16,8 +16,6 @@ const categoryService = new CategoryService();
 
 const categoryController = new CategoryController(categoryService);
 
-//parameterized route first
-//todo
 categoryRouter
     .route("/:id")
     .all(categoryIdValidator)

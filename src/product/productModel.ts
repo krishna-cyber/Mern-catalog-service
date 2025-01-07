@@ -38,6 +38,7 @@ const productSchema = new Schema(
         priceConfiguration: {
             type: Map,
             of: priceConfigurationSchema,
+            required: true,
         },
         attributes: {
             type: [attributeSchema],
@@ -49,6 +50,7 @@ const productSchema = new Schema(
         categoryId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Category",
+            required: true,
         },
         isPublish: {
             type: Boolean,

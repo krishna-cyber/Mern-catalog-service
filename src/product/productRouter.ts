@@ -7,6 +7,9 @@ import express, {
 import canAccess from "../common/middlewares/canAccess";
 import { ProductController } from "./productController";
 import ProductService from "./productService";
+import authenticate from "../common/middlewares/authenticate";
+import { ROLES } from "../config/constants";
+import productValidator from "./productValidator";
 const productRouter = express.Router();
 const productService = new ProductService();
 
@@ -31,9 +34,9 @@ productRouter
         productController.getProductLists(req, res, next),
     )
     .post(
-        // authenticate,
-        canAccess(["admin"]) as RequestHandler,
-        // categoryValidator,
+        authenticate,
+        canAccess([ROLES.ADMIN, ROLES.MANAGER]) as RequestHandler,
+        productValidator,
         (req: Request, res: Response, next: NextFunction) =>
             productController.create(req, res, next),
     );

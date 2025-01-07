@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
 import CategoryService from "./categoryService";
-import { CreateCategoryRequest } from "./categoryTypes";
+import { Category, CreateCategoryRequest } from "./categoryTypes";
 
 export class CategoryController {
     constructor(private categoryService: CategoryService) {}
@@ -49,11 +49,51 @@ export class CategoryController {
             if (!validation.isEmpty()) {
                 throw createHttpError(422, validation.array()[0].msg as string);
             }
-            const categoryDetails =
-                await this.categoryService.getCategoryById(id);
+            const categoryDetails = await this.categoryService.getById(id);
             res.json({
                 result: categoryDetails,
                 message: "Category Details",
+                meta: null,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async updateCategoryById(req: Request, res: Response, next: NextFunction) {
+        const validation = validationResult(req);
+        const { id } = req.params;
+        const updateValue = req.body as Category;
+        try {
+            if (!validation.isEmpty()) {
+                throw createHttpError(422, validation.array()[0].msg as string);
+            }
+
+            await this.categoryService.updateById(id, updateValue);
+
+            res.json({
+                result: null,
+                message: "Updated Successfully",
+                meta: null,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async deleteCategoryById(req: Request, res: Response, next: NextFunction) {
+        const validation = validationResult(req);
+        const { id } = req.params;
+        try {
+            if (!validation.isEmpty()) {
+                throw createHttpError(422, validation.array()[0].msg as string);
+            }
+
+            await this.categoryService.deleteById(id);
+
+            res.json({
+                result: null,
+                message: "Category deleted",
                 meta: null,
             });
         } catch (error) {

@@ -1,5 +1,5 @@
 import categoryModel from "./categoryModel";
-import { Attribute, PriceConfiguration } from "./categoryTypes";
+import { Attribute, Category, PriceConfiguration } from "./categoryTypes";
 
 export default class CategoryService {
     constructor() {}
@@ -22,7 +22,15 @@ export default class CategoryService {
         return categoryModel.find({});
     }
 
-    async getCategoryById(id: string) {
+    async getById(id: string) {
         return categoryModel.findById(id);
+    }
+
+    async updateById(id: string, data: Category) {
+        return categoryModel.findByIdAndUpdate(id, data);
+    }
+
+    async deleteById(id: string) {
+        return categoryModel.deleteOne({ id });
     }
 }

@@ -25,7 +25,7 @@ categoryRouter
         categoryController.getSingleCategory(req, res, next),
     )
     .patch((req: Request, res: Response, next: NextFunction) =>
-        categoryController.getSingleCategory(req, res, next),
+        categoryController.updateCategoryById(req, res, next),
     )
     .delete((req: Request, res: Response, next: NextFunction) =>
         categoryController.getSingleCategory(req, res, next),

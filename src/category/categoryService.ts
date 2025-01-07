@@ -17,4 +17,12 @@ export default class CategoryService {
 
         return category.save();
     }
+
+    async listCategories() {
+        return categoryModel.find({});
+    }
+
+    async getCategoryById(id: string) {
+        return categoryModel.findById(id);
+    }
 }

@@ -31,9 +31,11 @@ export class CategoryController {
     }
     async getCategoryLists(req: Request, res: Response, next: NextFunction) {
         try {
-            //todo
+            const categories = await this.categoryService.listCategories();
             res.json({
-                msg: "All list fetched",
+                result: categories,
+                message: "Categories list fetched",
+                meta: null,
             });
         } catch (error) {
             next(error);
@@ -41,11 +43,19 @@ export class CategoryController {
     }
 
     async getSingleCategory(req: Request, res: Response, next: NextFunction) {
+        const validation = validationResult(req);
         const { id } = req.params;
-
-        //todo
         try {
-            res.json({ msg: id });
+            if (!validation.isEmpty()) {
+                throw createHttpError(422, validation.array()[0].msg as string);
+            }
+            const categoryDetails =
+                await this.categoryService.getCategoryById(id);
+            res.json({
+                result: categoryDetails,
+                message: "Category Details",
+                meta: null,
+            });
         } catch (error) {
             next(error);
         }

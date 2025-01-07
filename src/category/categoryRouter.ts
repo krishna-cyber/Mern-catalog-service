@@ -9,6 +9,7 @@ import categoryValidator from "./categoryValidator";
 import CategoryService from "./categoryService";
 import authenticate from "../common/middlewares/authenticate";
 import canAccess from "../common/middlewares/canAccess";
+import categoryIdValidator from "./categoryIdValidator";
 const categoryRouter = express.Router();
 
 const categoryService = new CategoryService();
@@ -19,6 +20,7 @@ const categoryController = new CategoryController(categoryService);
 //todo
 categoryRouter
     .route("/:id")
+    .all(categoryIdValidator)
     .get((req: Request, res: Response, next: NextFunction) =>
         categoryController.getSingleCategory(req, res, next),
     )
@@ -31,6 +33,7 @@ categoryRouter
 
 categoryRouter
     .route("/")
+
     .get((req: Request, res: Response, next: NextFunction) =>
         categoryController.getCategoryLists(req, res, next),
     )

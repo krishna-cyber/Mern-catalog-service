@@ -31,6 +31,6 @@ export default class CategoryService {
     }
 
     async deleteById(id: string) {
-        return categoryModel.deleteOne({ id });
+        return categoryModel.deleteOne({ _id: id });
     }
 }

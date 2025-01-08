@@ -1,10 +1,20 @@
 import { NextFunction, Request, Response } from "express";
 import productService from "./productService";
+import { validationResult } from "express-validator";
+import createHttpError from "http-errors";
 
 export class ProductController {
     constructor(private productService: productService) {}
     async create(req: Request, res: Response, next: NextFunction) {
+        const validationPassed = validationResult(req);
+
         try {
+            if (!validationPassed.isEmpty()) {
+                throw createHttpError(
+                    400,
+                    validationPassed.array()[0].msg as string,
+                );
+            }
             res.json({
                 result: null,
                 message: "Product Created successfully",

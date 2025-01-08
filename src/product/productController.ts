@@ -2,11 +2,23 @@ import { NextFunction, Request, Response } from "express";
 import productService from "./productService";
 import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
+import { productDetails } from "./productTypes";
 
 export class ProductController {
     constructor(private productService: productService) {}
     async create(req: Request, res: Response, next: NextFunction) {
         const validationPassed = validationResult(req);
+
+        const {
+            name,
+            description,
+            image,
+            priceConfiguration,
+            attributes,
+            tenantId,
+            categoryId,
+            isPublish,
+        } = req.body as productDetails;
 
         try {
             if (!validationPassed.isEmpty()) {
@@ -15,6 +27,18 @@ export class ProductController {
                     validationPassed.array()[0].msg as string,
                 );
             }
+
+            await this.productService.create(
+                name,
+                description,
+                image,
+                priceConfiguration,
+                attributes,
+                tenantId,
+                categoryId,
+                isPublish,
+            );
+
             res.json({
                 result: null,
                 message: "Product Created successfully",

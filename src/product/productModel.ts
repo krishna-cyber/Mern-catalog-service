@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
+import { ProductAttribute } from "./productTypes";
 
-const attributeSchema = new Schema({
+const attributeSchema = new Schema<ProductAttribute>({
     name: {
         type: String,
     },

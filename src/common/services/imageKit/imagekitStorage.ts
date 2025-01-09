@@ -1,6 +1,7 @@
 import ImageKit from "imagekit";
-import { FileStorage, fileType } from "../../types/storageTypes";
+import { FileStorage } from "../../types/storageTypes";
 import config from "config";
+import { UploadedFile } from "express-fileupload";
 
 export class imagekitStorage implements FileStorage {
     private client: ImageKit;
@@ -14,8 +15,29 @@ export class imagekitStorage implements FileStorage {
 
     //todo
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    upload(data: fileType): void {
-        throw new Error("Method not implemented.");
+    async upload(data: UploadedFile | UploadedFile[]) {
+        try {
+            if (!data) {
+                return;
+            }
+
+            if (Array.isArray(data)) {
+                const uploadPromises = data.map((file) =>
+                    this.client.upload({
+                        file: file.data,
+                        fileName: file.name,
+                    }),
+                );
+                return Promise.all(uploadPromises);
+            } else {
+                return this.client.upload({
+                    file: data.data,
+                    fileName: data.name,
+                });
+            }
+        } catch (error) {
+            throw new Error("Method not implemented.");
+        }
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     delete(fileName: string): void {

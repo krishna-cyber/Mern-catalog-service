@@ -9,11 +9,13 @@ import { ProductController } from "./productController";
 import ProductService from "./productService";
 import authenticate from "../common/middlewares/authenticate";
 import { ROLES } from "../config/constants";
-import productValidator from "./productValidator";
+// import productValidator from "./productValidator";
+import { imagekitStorage } from "../common/services/imageKit/imagekitStorage";
 const productRouter = express.Router();
 const productService = new ProductService();
+const imageKitClient = new imagekitStorage();
 
-const productController = new ProductController(productService);
+const productController = new ProductController(productService, imageKitClient);
 
 // productRouter
 //     .route("/:id")
@@ -36,7 +38,7 @@ productRouter
     .post(
         authenticate,
         canAccess([ROLES.ADMIN, ROLES.MANAGER]) as RequestHandler,
-        productValidator,
+        // productValidator,
         (req: Request, res: Response, next: NextFunction) =>
             productController.create(req, res, next),
     );

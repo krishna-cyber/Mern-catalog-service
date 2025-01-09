@@ -1,3 +1,5 @@
+import { UploadedFile } from "express-fileupload";
+
 export interface fileType {
     fileName: string;
     fileUrl: string;
@@ -5,7 +7,7 @@ export interface fileType {
 }
 
 export interface FileStorage {
-    upload(data: fileType): void;
+    upload(data: UploadedFile | UploadedFile[]): void;
     delete(fileName: string): void;
     getObjectUri(fileName: string): void;
 }

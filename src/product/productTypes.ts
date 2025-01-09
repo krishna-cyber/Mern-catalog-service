@@ -8,7 +8,7 @@ export interface ProductAttribute {
 export interface productDetails {
     name: string;
     description: string;
-    image: string;
+    image: ArrayBuffer;
     priceConfiguration: PriceConfiguration;
     attributes: [ProductAttribute];
     tenantId: string;

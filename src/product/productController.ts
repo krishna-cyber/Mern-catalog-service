@@ -3,22 +3,27 @@ import productService from "./productService";
 import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
 import { productDetails } from "./productTypes";
+import { imagekitStorage } from "../common/services/imageKit/imagekitStorage";
 
 export class ProductController {
-    constructor(private productService: productService) {}
+    constructor(
+        private productService: productService,
+        private uploadClient: imagekitStorage,
+    ) {}
     async create(req: Request, res: Response, next: NextFunction) {
         const validationPassed = validationResult(req);
 
         const {
             name,
             description,
-            image,
             priceConfiguration,
             attributes,
             tenantId,
             categoryId,
             isPublish,
         } = req.body as productDetails;
+
+        const files = req.files;
 
         try {
             if (!validationPassed.isEmpty()) {
@@ -28,10 +33,23 @@ export class ProductController {
                 );
             }
 
+            if (!files) {
+                return;
+            }
+            const uploadDetails = await this.uploadClient.upload(files?.file);
+
+            const uploadUrl = Array.isArray(uploadDetails)
+                ? uploadDetails[0]?.url
+                : uploadDetails?.url;
+
+            if (!uploadUrl) {
+                throw createHttpError(400, "File upload failed");
+            }
+
             await this.productService.create(
                 name,
                 description,
-                image,
+                uploadUrl,
                 priceConfiguration,
                 attributes,
                 tenantId,

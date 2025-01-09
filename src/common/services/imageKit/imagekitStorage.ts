@@ -1,13 +1,14 @@
 import ImageKit from "imagekit";
 import { FileStorage, fileType } from "../../types/storageTypes";
+import config from "config";
 
 export class imagekitStorage implements FileStorage {
     private client: ImageKit;
     constructor() {
         this.client = new ImageKit({
-            publicKey: "df",
-            privateKey: "dfd",
-            urlEndpoint: "",
+            publicKey: config.get("imageKit.PUBLIC_KEY"),
+            privateKey: config.get("imageKit.PRIVATE_KEY"),
+            urlEndpoint: config.get("imageKit.URL_ENDPOINT"),
         });
     }
 

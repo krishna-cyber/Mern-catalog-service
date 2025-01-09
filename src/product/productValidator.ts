@@ -1,3 +1,4 @@
+import { UploadedFile } from "express-fileupload";
 import { checkSchema } from "express-validator";
 
 export default checkSchema(
@@ -38,18 +39,18 @@ export default checkSchema(
                 errorMessage: "Tenant is required",
             },
         },
-        // image: {
-        //     custom: {
-        //         options: (value, { req }) => {
-        //             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        //             const file = req.file;
-        //             if (!file) {
-        //                 throw new Error("File is required");
-        //             }
-        //             return true;
-        //         },
-        //     },
-        // },
+        image: {
+            custom: {
+                options: (value, { req }) => {
+                    const files = req.files as UploadedFile[];
+
+                    if (!files) {
+                        throw new Error("File is required");
+                    }
+                    return true;
+                },
+            },
+        },
     },
     ["body"],
 );

@@ -19,7 +19,7 @@ export default class CategoryService {
     }
 
     async listCategories() {
-        return categoryModel.find({});
+        return categoryModel.find({}).select("_id name");
     }
 
     async getById(_id: string) {

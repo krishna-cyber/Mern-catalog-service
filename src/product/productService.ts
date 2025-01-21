@@ -3,8 +3,6 @@ import productModel from "./productModel";
 import { ProductAttribute } from "./productTypes";
 
 export default class ProductService {
-    constructor() {}
-
     async create(
         name: string,
         description: string,

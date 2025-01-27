@@ -55,7 +55,7 @@ const productSchema = new Schema(
         },
         isPublish: {
             type: Boolean,
-            default: false,
+            default: true,
         },
     },
     { timestamps: true },

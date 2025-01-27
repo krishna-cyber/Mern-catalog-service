@@ -10,6 +10,7 @@ import ProductService from "./productService";
 import authenticate from "../common/middlewares/authenticate";
 import { ROLES } from "../config/constants";
 import { imagekitStorage } from "../common/services/imageKit/imagekitStorage";
+import productValidator from "./productValidator";
 const productRouter = express.Router();
 const productService = new ProductService();
 const imageKitClient = new imagekitStorage();
@@ -24,7 +25,7 @@ productRouter
     .post(
         authenticate,
         canAccess([ROLES.ADMIN, ROLES.MANAGER]) as RequestHandler,
-        // productValidator,
+        productValidator,
         (req: Request, res: Response, next: NextFunction) =>
             productController.create(req, res, next),
     );

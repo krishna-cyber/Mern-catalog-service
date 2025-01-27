@@ -7,8 +7,8 @@ import { imagekitStorage } from "../common/services/imageKit/imagekitStorage";
 
 export class ProductController {
     constructor(
-        private productService: productService,
-        private uploadClient: imagekitStorage,
+        private readonly productService: productService,
+        private readonly uploadClient: imagekitStorage,
     ) {}
     async create(req: Request, res: Response, next: NextFunction) {
         const validationPassed = validationResult(req);

@@ -1,4 +1,3 @@
-import { UploadedFile } from "express-fileupload";
 import { checkSchema } from "express-validator";
 
 export default checkSchema(
@@ -42,7 +41,8 @@ export default checkSchema(
         image: {
             custom: {
                 options: (value, { req }) => {
-                    const files = req.files as UploadedFile[];
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    const files = req.files;
 
                     if (!files) {
                         throw new Error("File is required");

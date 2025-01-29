@@ -2,17 +2,18 @@ import { NextFunction, Request, Response } from "express";
 import productService from "./productService";
 import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
-import { productDetails } from "./productTypes";
-import { imagekitStorage } from "../common/services/imageKit/imagekitStorage";
+import { ProductAttribute, ProductBodyRequest } from "./productTypes";
+import { ImagekitStorage } from "../common/services/imageKit/imagekitStorage";
+import { PriceConfiguration } from "../category/categoryTypes";
 
 export class ProductController {
     constructor(
         private readonly productService: productService,
-        private readonly uploadClient: imagekitStorage,
+        private readonly uploadClient: ImagekitStorage,
     ) {}
     async create(req: Request, res: Response, next: NextFunction) {
         const validationPassed = validationResult(req);
-
+        let images: string[] = [];
         const {
             name,
             description,
@@ -21,9 +22,11 @@ export class ProductController {
             tenantId,
             categoryId,
             isPublish,
-        } = req.body as productDetails;
+        } = req.body as ProductBodyRequest;
 
-        const files = req.files;
+        const files = req.files as
+            | { [fieldname: string]: Express.Multer.File[] }
+            | Express.Multer.File[];
 
         try {
             if (!validationPassed.isEmpty()) {
@@ -33,29 +36,30 @@ export class ProductController {
                 );
             }
 
-            if (!files) {
-                return;
-            }
-            const uploadDetails = await this.uploadClient.upload(files?.file);
-
-            const uploadUrl = Array.isArray(uploadDetails)
-                ? uploadDetails[0]?.url
-                : uploadDetails?.url;
-
-            if (!uploadUrl) {
-                throw createHttpError(400, "File upload failed");
+            if (files) {
+                const imageToUpload = Array.isArray(files)
+                    ? files
+                    : files.images || [];
+                const uploadedImages =
+                    await this.uploadClient.upload(imageToUpload);
+                if (uploadedImages) {
+                    images = uploadedImages.map((image) => image.url);
+                }
             }
 
-            await this.productService.create(
+            const product = {
                 name,
                 description,
-                uploadUrl,
-                priceConfiguration,
-                attributes,
+                image: images,
+                priceConfiguration: JSON.parse(
+                    priceConfiguration,
+                ) as PriceConfiguration,
+                attributes: JSON.parse(attributes) as [ProductAttribute],
                 tenantId,
                 categoryId,
                 isPublish,
-            );
+            };
+            await this.productService.create(product);
 
             res.json({
                 result: null,

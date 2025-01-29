@@ -9,11 +9,12 @@ import { ProductController } from "./productController";
 import ProductService from "./productService";
 import authenticate from "../common/middlewares/authenticate";
 import { ROLES } from "../config/constants";
-import { imagekitStorage } from "../common/services/imageKit/imagekitStorage";
+import { ImagekitStorage } from "../common/services/imageKit/imagekitStorage";
 import productValidator from "./productValidator";
+import upload from "../common/services/multer/multer";
 const productRouter = express.Router();
 const productService = new ProductService();
-const imageKitClient = new imagekitStorage();
+const imageKitClient = new ImagekitStorage();
 
 const productController = new ProductController(productService, imageKitClient);
 
@@ -23,6 +24,7 @@ productRouter
         productController.getProductLists(req, res, next),
     )
     .post(
+        upload.array("images[]"),
         authenticate,
         canAccess([ROLES.ADMIN, ROLES.MANAGER]) as RequestHandler,
         productValidator,

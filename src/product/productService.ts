@@ -1,28 +1,9 @@
-import { PriceConfiguration } from "../category/categoryTypes";
 import productModel from "./productModel";
-import { ProductAttribute } from "./productTypes";
+import { ProductDetails } from "./productTypes";
 
 export default class ProductService {
-    async create(
-        name: string,
-        description: string,
-        image: string,
-        priceConfiguration: PriceConfiguration,
-        attributes: [ProductAttribute],
-        tenantId: string,
-        categoryId: string,
-        isPublish = false,
-    ) {
-        const category = new productModel({
-            name,
-            description,
-            image,
-            priceConfiguration,
-            attributes,
-            tenantId,
-            categoryId,
-            isPublish,
-        });
+    async create(productDetails: ProductDetails) {
+        const category = new productModel(productDetails);
 
         return category.save();
     }

@@ -5,12 +5,22 @@ export interface ProductAttribute {
     value: string;
 }
 
-export interface productDetails {
+export interface ProductDetails {
     name: string;
     description: string;
-    image: ArrayBuffer;
+    image: string[];
     priceConfiguration: PriceConfiguration;
     attributes: [ProductAttribute];
+    tenantId: string;
+    categoryId: string;
+    isPublish: boolean;
+}
+
+export interface ProductBodyRequest {
+    name: string;
+    description: string;
+    priceConfiguration: string;
+    attributes: string;
     tenantId: string;
     categoryId: string;
     isPublish: boolean;

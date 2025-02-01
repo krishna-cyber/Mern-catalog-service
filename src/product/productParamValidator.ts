@@ -39,6 +39,13 @@ export default checkSchema(
                 },
             },
         },
+        isPublish: {
+            customSanitizer: {
+                options: (value: string) => {
+                    return value || "";
+                },
+            },
+        },
     },
     ["query"],
 );

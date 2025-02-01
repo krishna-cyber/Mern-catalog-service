@@ -25,7 +25,7 @@ export default class ProductService {
         }
         const filteredQueryParams: FilteredQueryParams = {
             // ...(tenantId && { tenantId }),
-            // ...(searchString && { searchString }),
+            // ...(searchString && { searchString }),  //येसरी पनि लेखन सकिन्छ ,if लगाउने भन्दा यो तरिका राम्रो र छोटो छ
             ...(isPublish && { isPublish: Boolean(isPublish) }),
         };
 

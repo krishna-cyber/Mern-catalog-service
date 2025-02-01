@@ -79,6 +79,7 @@ export class ProductController {
             tenantId: string | null;
             categoryId: string | null;
             search: string;
+            isPublish: boolean;
         };
 
         try {
@@ -90,6 +91,7 @@ export class ProductController {
                     queryParams.categoryId,
                     queryParams.tenantId,
                     queryParams.search,
+                    queryParams.isPublish,
                 );
 
             res.status(200).json({
@@ -135,9 +137,7 @@ export class ProductController {
     //         if (!validation.isEmpty()) {
     //             throw createHttpError(422, validation.array()[0].msg as string);
     //         }
-
     //         await this.productService.updateById(id, updateValue);
-
     //         res.json({
     //             result: null,
     //             message: "Updated Successfully",
@@ -155,9 +155,7 @@ export class ProductController {
     //         if (!validation.isEmpty()) {
     //             throw createHttpError(422, validation.array()[0].msg as string);
     //         }
-
     //         await this.productService.deleteById(id);
-
     //         res.json({
     //             result: null,
     //             message: "Category deleted",

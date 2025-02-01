@@ -15,13 +15,19 @@ export default class ProductService {
         categoryId: string | null,
         tenantId: string | null,
         searchString: string,
+        isPublish: boolean,
     ) {
         interface FilteredQueryParams {
             name?: { $regex: string; $options: string };
             tenantId?: string;
             categoryId?: mongoose.Types.ObjectId;
+            isPublish?: boolean | object;
         }
-        const filteredQueryParams: FilteredQueryParams = {};
+        const filteredQueryParams: FilteredQueryParams = {
+            // ...(tenantId && { tenantId }),
+            // ...(searchString && { searchString }),
+            ...(isPublish && { isPublish: Boolean(isPublish) }),
+        };
 
         if (tenantId) {
             filteredQueryParams.tenantId = tenantId;

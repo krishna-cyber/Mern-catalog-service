@@ -12,6 +12,7 @@ import { ROLES } from "../config/constants";
 import { ImagekitStorage } from "../common/services/imageKit/imagekitStorage";
 import productValidator from "./productValidator";
 import upload from "../common/services/multer/multer";
+import productParamValidator from "./productParamValidator";
 const productRouter = express.Router();
 const productService = new ProductService();
 const imageKitClient = new ImagekitStorage();
@@ -20,8 +21,10 @@ const productController = new ProductController(productService, imageKitClient);
 
 productRouter
     .route("/")
-    .get((req: Request, res: Response, next: NextFunction) =>
-        productController.getProductLists(req, res, next),
+    .get(
+        productParamValidator,
+        (req: Request, res: Response, next: NextFunction) =>
+            productController.getProductLists(req, res, next),
     )
     .post(
         upload.array("images[]"),

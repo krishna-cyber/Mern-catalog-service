@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import productService from "./productService";
-import { validationResult } from "express-validator";
+import { matchedData, validationResult } from "express-validator";
 import createHttpError from "http-errors";
 import { ProductAttribute, ProductBodyRequest } from "./productTypes";
 import { ImagekitStorage } from "../common/services/imageKit/imagekitStorage";
@@ -41,9 +41,11 @@ export class ProductController {
                     ? files
                     : files.images || [];
                 const uploadedImages =
-                    await this.uploadClient.upload(imageToUpload);
-                if (uploadedImages) {
-                    images = uploadedImages.map((image) => image.url);
+                    (await this.uploadClient.upload(imageToUpload)) || [];
+                if (Array.isArray(uploadedImages)) {
+                    images = uploadedImages.map(
+                        (image: { url: string }) => image.url,
+                    );
                 }
             }
 
@@ -71,15 +73,38 @@ export class ProductController {
         }
     }
     async getProductLists(req: Request, res: Response, next: NextFunction) {
+        const queryParams = matchedData(req, { onlyValidData: true }) as {
+            currentPage: number;
+            pageSize: number;
+            tenantId: string | null;
+            categoryId: string | null;
+            search: string;
+        };
+
         try {
-            const products = await this.productService.listCategories();
-            res.json({
-                result: products,
-                message: "Products list fetched",
-                meta: null,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            const { data, totalCounts } =
+                await this.productService.getProductLists(
+                    queryParams.currentPage,
+                    queryParams.pageSize,
+                    queryParams.categoryId,
+                    queryParams.tenantId,
+                    queryParams.search,
+                );
+
+            res.status(200).json({
+                result: data as string[],
+                message: "User list fetched successfully",
+                meta: {
+                    currentPage: queryParams.currentPage,
+                    pageSize: queryParams.pageSize,
+                    totalDocuments: totalCounts as number,
+                },
             });
         } catch (error) {
-            next(error);
+            const err = createHttpError(500, "Error while fetching user list");
+            next(err);
+            return;
         }
     }
 

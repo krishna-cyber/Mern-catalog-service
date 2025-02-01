@@ -23,10 +23,19 @@ export class ImagekitStorage implements FileStorage {
 
             if (Array.isArray(data)) {
                 const uploadPromises = data.map(async (file) => {
-                    return await this.client.upload({
-                        file: fs.createReadStream(file.path), //required
-                        fileName: file.filename, //required
-                    });
+                    return await this.client
+                        .upload({
+                            file: fs.createReadStream(file.path), //required
+                            fileName: file.filename, //required
+                        })
+                        .then((res) => {
+                            fs.unlink(file.path, (err) => {
+                                if (err) {
+                                    throw err;
+                                }
+                            });
+                            return res;
+                        });
                 });
                 return Promise.all(uploadPromises);
             }

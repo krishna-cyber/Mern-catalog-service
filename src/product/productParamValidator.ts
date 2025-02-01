@@ -21,21 +21,21 @@ export default checkSchema(
         tenantId: {
             customSanitizer: {
                 options: (value: string) => {
-                    return value ? value : "";
+                    return value || "";
                 },
             },
         },
-        searchString: {
+        search: {
             customSanitizer: {
                 options: (value: string) => {
-                    return value ? value : "";
+                    return value || "";
                 },
             },
         },
         categoryId: {
             customSanitizer: {
                 options: (value: string) => {
-                    return value ? value : "";
+                    return value || "";
                 },
             },
         },

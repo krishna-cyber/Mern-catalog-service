@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Product from "./productModel";
 import { ProductDetails } from "./productTypes";
 
@@ -9,16 +10,16 @@ export default class ProductService {
     }
 
     async getProductLists(
-        currentPage: number = 1,
-        pageSize: number = 10,
-        tenantId: string | null = "",
-        categoryId: string | null = "",
-        searchString: string = "",
+        currentPage: number,
+        pageSize: number,
+        categoryId: string | null,
+        tenantId: string | null,
+        searchString: string,
     ) {
         interface FilteredQueryParams {
             name?: { $regex: string; $options: string };
             tenantId?: string;
-            categoryId?: string;
+            categoryId?: mongoose.Types.ObjectId;
         }
         const filteredQueryParams: FilteredQueryParams = {};
 
@@ -26,8 +27,10 @@ export default class ProductService {
             filteredQueryParams.tenantId = tenantId;
         }
 
-        if (categoryId) {
-            filteredQueryParams.categoryId = categoryId;
+        if (categoryId && mongoose.Types.ObjectId.isValid(categoryId)) {
+            filteredQueryParams.categoryId = new mongoose.Types.ObjectId(
+                categoryId,
+            );
         }
 
         if (searchString) {
@@ -57,7 +60,7 @@ export default class ProductService {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
             data: results[0]?.data || [],
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-            totalCounts: results[0].totalCounts[0].count || 0,
+            totalCounts: results[0]?.totalCounts[0]?.count || 0,
         };
 
         return response;

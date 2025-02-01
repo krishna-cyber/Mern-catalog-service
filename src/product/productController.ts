@@ -85,8 +85,8 @@ export class ProductController {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             const { data, totalCounts } =
                 await this.productService.getProductLists(
-                    queryParams.currentPage,
-                    queryParams.pageSize,
+                    queryParams.currentPage || 1,
+                    queryParams.pageSize || 10,
                     queryParams.categoryId,
                     queryParams.tenantId,
                     queryParams.search,
@@ -94,7 +94,7 @@ export class ProductController {
 
             res.status(200).json({
                 result: data as string[],
-                message: "User list fetched successfully",
+                message: "Products fetched successfully",
                 meta: {
                     currentPage: queryParams.currentPage,
                     pageSize: queryParams.pageSize,
@@ -102,7 +102,8 @@ export class ProductController {
                 },
             });
         } catch (error) {
-            const err = createHttpError(500, "Error while fetching user list");
+            const err = createHttpError(500, `Error fetching product lists`);
+
             next(err);
             return;
         }

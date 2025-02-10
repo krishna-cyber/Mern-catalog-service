@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import autopopulate from "mongoose-autopopulate";
 
 const priceConfigurationSchema = new Schema({
     avilableOptions: {
@@ -39,6 +40,7 @@ const productSchema = new Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "Category",
             required: true,
+            autopopulate: true,
         },
         isPublish: {
             type: Boolean,
@@ -47,6 +49,8 @@ const productSchema = new Schema(
     },
     { timestamps: true },
 );
+
+productSchema.plugin(autopopulate);
 
 const Product = mongoose.model("Product", productSchema);
 

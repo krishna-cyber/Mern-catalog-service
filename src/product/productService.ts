@@ -46,27 +46,16 @@ export default class ProductService {
             };
         }
 
-        const results = await Product.aggregate([
-            {
-                $match: filteredQueryParams,
-            },
-            {
-                $facet: {
-                    totalCounts: [{ $count: "count" }],
-                    data: [
-                        { $sort: { createdAt: -1 } },
-                        { $skip: (currentPage - 1) * pageSize },
-                        { $limit: pageSize },
-                    ],
-                },
-            },
-        ]);
+        const data = await Product.find(filteredQueryParams)
+            .sort({ createdAt: -1 })
+            .skip((currentPage - 1) * pageSize)
+            .limit(pageSize);
+
+        const totalCounts = await Product.countDocuments();
 
         const response = {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-            data: results[0]?.data || [],
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-            totalCounts: results[0]?.totalCounts[0]?.count || 0,
+            data,
+            totalCounts,
         };
 
         return response;

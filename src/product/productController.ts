@@ -95,12 +95,12 @@ export class ProductController {
                 );
 
             res.status(200).json({
-                result: data as string[],
+                result: data,
                 message: "Products fetched successfully",
                 meta: {
                     currentPage: queryParams.currentPage,
                     pageSize: queryParams.pageSize,
-                    totalDocuments: totalCounts as number,
+                    totalDocuments: totalCounts,
                 },
             });
         } catch (error) {

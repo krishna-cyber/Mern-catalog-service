@@ -14,10 +14,11 @@ export class ToppingController {
 
     async getLists(req: Request, res: Response, next: NextFunction) {
         try {
-            await this.toppingService.lists();
+            const result = await this.toppingService.lists();
 
             res.json({
                 message: "Toppings list fetched",
+                result,
             });
         } catch (error) {
             next(error);

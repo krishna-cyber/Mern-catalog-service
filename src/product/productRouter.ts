@@ -13,6 +13,7 @@ import { ImagekitStorage } from "../common/services/imageKit/imagekitStorage";
 import productValidator from "./productValidator";
 import upload from "../common/services/multer/multer";
 import productParamValidator from "./productParamValidator";
+// import Product from "./productModel";
 const productRouter = express.Router();
 const productService = new ProductService();
 const imageKitClient = new ImagekitStorage();
@@ -34,5 +35,16 @@ productRouter
         (req: Request, res: Response, next: NextFunction) =>
             productController.create(req, res, next),
     );
+
+// productRouter
+//     .route("/:productId")
+//     .get(async (req: Request, res: Response, next: NextFunction) => {
+//         const product = await Product.findOne({
+//             _id: "679a4467b43a49dc01dcd9ef",
+//         });
+//         res.json({
+//             product,
+//         });
+//     });
 
 export default productRouter;

@@ -15,7 +15,7 @@
         "start": "ts-node src/index.ts",
         "test": "jest --runInBand"
     },
-    "author": "Rakesh K <codersgyan@gmail.com>",
+    "author": "Krishna Tiwari <tiwarikrishna54321@gmail.com>",
     "license": "ISC",
     "devDependencies": {
         "@types/config": "^3.3.5",

@@ -1,11 +1,12 @@
 import ImageKit from "imagekit";
 import { FileStorage } from "../../types/storageTypes";
 import config from "config";
-import fs from "fs";
+import fs from "node:fs";
+import { Logger } from "winston";
 
 export class ImagekitStorage implements FileStorage {
     private readonly client: ImageKit;
-    constructor() {
+    constructor(private readonly logger: Logger) {
         this.client = new ImageKit({
             publicKey: config.get("imageKit.PUBLIC_KEY"),
             privateKey: config.get("imageKit.PRIVATE_KEY"),
@@ -13,8 +14,32 @@ export class ImagekitStorage implements FileStorage {
         });
     }
 
-    //todo
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async uploadSingle(file: Express.Multer.File) {
+        try {
+            const uploadResult = await this.client.upload({
+                file: fs.createReadStream(file.path),
+                fileName: file.filename,
+            });
+
+            fs.unlink(file.path, (err) => {
+                if (err) {
+                    throw err;
+                }
+                this.logger.info(`File deleted and uploaded`);
+            });
+
+            return uploadResult;
+        } catch (error) {
+            fs.unlink(file.path, (err) => {
+                if (err) {
+                    throw err;
+                }
+                this.logger.info(`File deleted and uploaded`);
+            });
+            throw new Error(`Error uploading a file`);
+        }
+    }
+
     async upload(data: Express.Multer.File[]) {
         try {
             if (!data) {
@@ -40,7 +65,7 @@ export class ImagekitStorage implements FileStorage {
                 return Promise.all(uploadPromises);
             }
         } catch (error) {
-            throw new Error("Method not implemented.");
+            throw new Error("Error uploading files");
         }
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -24,20 +24,14 @@ export default class ProductService {
             isPublish?: boolean | object;
         }
         const filteredQueryParams: FilteredQueryParams = {
-            // ...(tenantId && { tenantId }),
-            // ...(searchString && { searchString }),  //येसरी पनि लेखन सकिन्छ ,if लगाउने भन्दा यो तरिका राम्रो र छोटो छ
+            ...(tenantId && { tenantId }),
+            ...(categoryId &&
+                mongoose.Types.ObjectId.isValid(categoryId) && {
+                    categoryId: new mongoose.Types.ObjectId(categoryId),
+                }),
+            //येसरी पनि लेखन सकिन्छ ,if लगाउने भन्दा यो तरिका राम्रो र छोटो छ
             ...(isPublish && { isPublish: Boolean(isPublish) }),
         };
-
-        if (tenantId) {
-            filteredQueryParams.tenantId = tenantId;
-        }
-
-        if (categoryId && mongoose.Types.ObjectId.isValid(categoryId)) {
-            filteredQueryParams.categoryId = new mongoose.Types.ObjectId(
-                categoryId,
-            );
-        }
 
         if (searchString) {
             filteredQueryParams.name = {

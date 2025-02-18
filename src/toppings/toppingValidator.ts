@@ -29,9 +29,9 @@ export default checkSchema({
         custom: {
             options: (value, { req }) => {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                const files = req.files;
+                const file = req.file;
 
-                if (!files) {
+                if (!file) {
                     throw new Error("File is required");
                 }
                 return true;

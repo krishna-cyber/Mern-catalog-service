@@ -6,3 +6,9 @@ export interface Topping {
     price: string;
     image: string;
 }
+
+export interface ToppingBodyRequest {
+    name: string;
+    tenantId: mongoose.Schema.Types.ObjectId;
+    price: string;
+}

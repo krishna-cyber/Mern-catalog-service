@@ -13,10 +13,11 @@ import { ImagekitStorage } from "../common/services/imageKit/imagekitStorage";
 import productValidator from "./productValidator";
 import upload from "../common/services/multer/multer";
 import productParamValidator from "./productParamValidator";
+import logger from "../config/logger";
 // import Product from "./productModel";
 const productRouter = express.Router();
 const productService = new ProductService();
-const imageKitClient = new ImagekitStorage();
+const imageKitClient = new ImagekitStorage(logger);
 
 const productController = new ProductController(productService, imageKitClient);
 

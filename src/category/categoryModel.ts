@@ -48,6 +48,10 @@ const categorySchema = new Schema<Category>(
             type: [attributeSchema],
             required: true,
         },
+        hasToppings: {
+            type: Boolean,
+            default: false,
+        },
     },
     { timestamps: true },
 );

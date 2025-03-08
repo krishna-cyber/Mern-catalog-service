@@ -14,10 +14,6 @@ export class ToppingService {
     constructor(private readonly imageUploadService: ImagekitStorage) {}
 
     async create({ file, name, tenantId, price }: ToppingCreateData) {
-        //todo
-        //upload file , if successfully uploaded deleted stored file
-        //get url
-        //save in database and return id of topping
         const uploadDetails = await this.imageUploadService.uploadSingle(file);
 
         const { _id } = await new Toppings({
